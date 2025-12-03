@@ -9,7 +9,7 @@
 ## Tech Stack
 - React (Hooks) & LocalStorage (JSON)
 
-## 📦 Setup Instructions
+## Setup Instructions
 
 ### 1. Clone the Repository
 ```bash
