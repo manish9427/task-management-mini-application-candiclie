@@ -3,7 +3,7 @@ import useLocalStorage from "./hooks/useLocalStorage";
 import TaskForm from "./components/TaskForm";
 import TaskList from "./components/TaskList";
 import Filter from "./components/Filter";
-// import "./App.css";
+import "./App.css";
 
 function App() {
   const [tasks, setTasks] = useLocalStorage("tasks", []);
@@ -26,7 +26,7 @@ function App() {
     filter === "All" ? tasks : tasks.filter((t) => t.status === filter);
 
   return (
-    <div style={{ margin: "20px" }}>
+    <div>
       <h2>Task Manager</h2>
       <TaskForm onAdd={addTask} />
       <Filter current={filter} onChange={setFilter} />
