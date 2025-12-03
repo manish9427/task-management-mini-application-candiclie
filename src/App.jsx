@@ -1,35 +1,38 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React, { useState } from "react";
+import useLocalStorage from "./hooks/useLocalStorage";
+import TaskForm from "./components/TaskForm";
+import TaskList from "./components/TaskList";
+import Filter from "./components/Filter";
+// import "./App.css";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [tasks, setTasks] = useLocalStorage("tasks", []);
+  const [filter, setFilter] = useState("All");
+
+  const addTask = (task) => setTasks([...tasks, task]);
+
+  const deleteTask = (id) => setTasks(tasks.filter((t) => t.id !== id));
+
+  const editTask = (id) => {
+    const task = tasks.find((t) => t.id === id);
+    const newTitle = prompt("Edit task:", task.title);
+    const newStatus = prompt("Edit status (Pending/In-Progress/Completed):", task.status);
+    if (newTitle) task.title = newTitle;
+    if (["Pending", "In-Progress", "Completed"].includes(newStatus)) task.status = newStatus;
+    setTasks(tasks.map((t) => (t.id === id ? task : t)));
+  };
+
+  const filteredTasks =
+    filter === "All" ? tasks : tasks.filter((t) => t.status === filter);
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <div style={{ margin: "20px" }}>
+      <h2>Task Manager</h2>
+      <TaskForm onAdd={addTask} />
+      <Filter current={filter} onChange={setFilter} />
+      <TaskList tasks={filteredTasks} onEdit={editTask} onDelete={deleteTask} />
+    </div>
+  );
 }
 
-export default App
+export default App;
